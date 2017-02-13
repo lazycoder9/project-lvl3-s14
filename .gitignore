@@ -1,0 +1,6 @@
+/.vagrant
+/node_modules/
+/tmp
+/dist
+/cm/*.retry
+npm-debug.log
