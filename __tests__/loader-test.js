@@ -1,11 +1,7 @@
 import path from 'path';
 import fs from 'fs';
 import nock from 'nock';
-import axios from 'axios';
-import httpAdapter from 'axios/lib/adapters/http';
 import loader from '../src/loader';
-
-axios.defaults.adapter = httpAdapter;
 
 const data = `<!DOCTYPE html>
 <html>
@@ -13,17 +9,18 @@ const data = `<!DOCTYPE html>
     <title>Test Page</title>
   </head>
   <body>
+    <h1>Test heade</h1>
     <p>Test data</p>
   </body>
 </html>`;
 
-const tempPath = fs.mkdtempSync('./temp/');
+const tempPath = './temp/';
 
 nock('http://lazycoder.com')
   .get('/test')
   .reply(200, data);
 
-test('Loader test', () => {
+test('Loader test', (done) => {
   loader('http://lazycoder.com/test', tempPath)
     .then((filePath) => {
       const files = fs.readdirSync(tempPath);
@@ -32,5 +29,7 @@ test('Loader test', () => {
       expect(fileName).toBe('lazycoder-com-test.html');
       expect(files.includes(fileName)).toBe(true);
       expect(fileData).toBe(data);
-    });
+      done();
+    })
+    .catch(done);
 });
