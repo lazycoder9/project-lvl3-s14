@@ -6,9 +6,13 @@
 [![Issue Count](https://codeclimate.com/github/lazycoder9/project-lvl3-s14/badges/issue_count.svg)](https://codeclimate.com/github/lazycoder9/project-lvl3-s14)
 
 ## Intall
-> $ npm install lazycoder-page-loader
+```sh
+$ npm install lazycoder-page-loader
+```
 
 ##Use
+```
 page-loader <url>
 
 page-loader --output /path/to/file <url>
+```
