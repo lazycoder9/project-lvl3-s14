@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "bin": {
-    "gendiff": "dist/bin/page-loader.js"
+    "page-loader": "dist/bin/page-loader.js"
   },
   "scripts": {
     "test": "jest",
@@ -48,8 +48,10 @@
     "readline-sync": "*"
   },
   "dependencies": {
+    "axios": "^0.15.3",
     "commander": "^2.9.0",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "nock": "^9.0.6"
   },
   "main": "index.js"
 }

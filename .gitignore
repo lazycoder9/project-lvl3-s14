@@ -4,3 +4,4 @@
 /dist
 /cm/*.retry
 npm-debug.log
+/temp/
