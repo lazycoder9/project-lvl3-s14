@@ -11,7 +11,7 @@ program
   .action((url) => {
     pageLoader(url, program.output)
       .then((savedFile) => {
-        console.log(`Your file saved in ${savedFile}`);
+        console.log(`Page was downloaded as ${savedFile}`);
       });
   })
   .parse(process.argv);

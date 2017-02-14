@@ -13,6 +13,6 @@ export default (urlLink, pathToSave = './') => {
     .then((res) => {
       const filePath = path.resolve(pathToSave, fileName);
       fs.writeFileSync(filePath, res.data);
-      return filePath;
+      return fileName;
     });
 };

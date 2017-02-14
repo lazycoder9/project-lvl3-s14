@@ -14,18 +14,15 @@ const data = `<!DOCTYPE html>
   </body>
 </html>`;
 
-const tempPath = './temp/';
-
 nock('http://lazycoder.com')
   .get('/test')
   .reply(200, data);
 
 test('Loader test', (done) => {
-  loader('http://lazycoder.com/test', tempPath)
-    .then((filePath) => {
-      const files = fs.readdirSync(tempPath);
-      const fileData = fs.readFileSync(filePath, 'utf-8');
-      const fileName = path.basename(filePath);
+  loader('http://lazycoder.com/test')
+    .then((fileName) => {
+      const files = fs.readdirSync('./');
+      const fileData = fs.readFileSync(fileName, 'utf-8');
       expect(fileName).toBe('lazycoder-com-test.html');
       expect(files.includes(fileName)).toBe(true);
       expect(fileData).toBe(data);
