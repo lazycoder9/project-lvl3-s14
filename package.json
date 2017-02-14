@@ -1,5 +1,5 @@
 {
-  "name": "page-loader",
+  "name": "lazycoder-page-loader",
   "version": "0.0.1",
   "description": "",
   "bin": {
@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "chalk": "^1.1.3",
     "commander": "^2.9.0",
     "lodash": "^4.17.4",
     "nock": "^9.0.6"
