@@ -7,6 +7,7 @@ const data = `<!DOCTYPE html>
 <html>
   <head>
     <title>Test Page</title>
+    <link rel="shortcut icon" type="image/x-icon" href="https://cdn2.hexlet.io/assets/icons/default/favicon-8fa102c058afb01de5016a155d7db433283dc7e08ddc3c4d1aef527c1b8502b6.ico" />
   </head>
   <body>
     <h1>Test heade</h1>

@@ -11,8 +11,8 @@ program
   .option('-o, --output [path_to_save]', 'Path to save files')
   .action((url) => {
     pageLoader(url, program.output)
-      .then((savedFile) => {
-        console.log(`\nPage was downloaded as ${chalk.green(savedFile)}\n`);
+      .then((res) => {
+        console.log(res);
       });
   })
   .parse(process.argv);

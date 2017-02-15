@@ -5,3 +5,4 @@
 /cm/*.retry
 npm-debug.log
 /temp/
+test.js
