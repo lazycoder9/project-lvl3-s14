@@ -1,21 +1,22 @@
 import cheerio from 'cheerio';
+import _ from 'lodash';
 
 const getLinkUrl = link => link.attr('href');
 const getScriptUrl = script => script.attr('src');
 const getImgUrl = img => img.attr('src');
 
-const urlTypes = {
+const getUrlTypes = {
   link: getLinkUrl,
   script: getScriptUrl,
   img: getImgUrl,
 };
 
-const getUrl = type => urlTypes[type];
+export const getUrl = type => getUrlTypes[type];
 
-export default (data) => {
+export default (data, link) => {
   const $ = cheerio.load(data);
-  const urls = ['link', 'script', 'img'].reduce((acc, item) => {
-    const links = $(item).map(function () {
+  const urls = _.flatMap(['link', 'script', 'img'], (item) => {
+    return $(item).map(function () {
       const current = getUrl(item)($(this));
       if (current) {
         if (current.includes('http')) {
@@ -24,10 +25,6 @@ export default (data) => {
         return `${link}${current}`;
       }
     }).get();
-
-    const newAcc = [...acc, ...links];
-    return newAcc;
-  }, []);
-
+  });
   return urls;
-}
+};
