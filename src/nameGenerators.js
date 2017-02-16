@@ -2,8 +2,8 @@ const linkToArray = link => link.split(/[^A-Z, a-z, 0-9]/g).filter(e => e).slice
 
 const fileNameGenerator = (arrLink) => {
   const extension = arrLink[arrLink.length - 1];
-  const withoutExt = arrLink.slice(-1);
-  return `${withoutExt.join('-')}${extension}`;
+  const withoutExt = arrLink.slice(0, -1);
+  return `${withoutExt.join('-')}.${extension}`;
 };
 
 const folderNameGenerator = arrLink => `${arrLink.join('-')}_files`;

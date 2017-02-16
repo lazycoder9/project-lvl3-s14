@@ -8,14 +8,12 @@ import generateName from './nameGenerators';
 const successMark = chalk.green(String.fromCharCode(0x2713));
 const failMark = chalk.red(String.fromCharCode(0x2718));
 
-const downloadFile = (link, pathToFile) => {
-  return axios.get(link, {
-    responseType: 'arraybuffer',
-  }).then((res) => {
-    fs.writeFileSync(pathToFile, res.data, 'binary');
-    console.log(`${successMark} ${link}`);
-  }).catch(() => console.log(`${failMark} ${link}`));
-};
+const downloadFile = (link, pathToFile) => axios.get(link, {
+  responseType: 'arraybuffer',
+}).then((res) => {
+  fs.writeFileSync(pathToFile, res.data, 'binary');
+  console.log(`${successMark} ${link}`);
+}).catch(() => console.log(`${failMark} ${link}`));
 
 export default (data, link, pathToDir = './') => {
   const urls = getUrls(data, link);
