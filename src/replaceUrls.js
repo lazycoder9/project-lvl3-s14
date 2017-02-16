@@ -3,7 +3,11 @@ import { getUrl } from './getUrls';
 import generateName from './nameGenerators';
 
 const replaceLinkUrl = (link, url) => link.attr('href', url);
-const replaceScriptUrl = (script, url) => script.attr('src', url);
+const replaceScriptUrl = (script, url) => {
+  if (script.attr('src')) {
+    return script.attr('src', url);
+  }
+};
 const replaceImgUrl = (img, url) => img.attr('src', url);
 
 const replaceUrlTypes = {
@@ -20,7 +24,7 @@ export default (data, link) => {
     $(item).each(function () {
       const dir = generateName(link, 'folder');
       const file = generateName(getUrl(item)($(this)), 'file');
-      replaceUrl(item)($(this), `/${dir}/${file}`);
+      replaceUrl(item)($(this), `${dir}/${file}`);
     });
   });
   return $.html();

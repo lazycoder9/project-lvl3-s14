@@ -38,10 +38,11 @@ describe('Loader test', () => {
     loader('http://lazycoder.com/test')
       .then((msg) => {
         const files = fs.readdirSync('./');
-        const fileData = fs.readFileSync('/lazycoder-com-test.html', 'utf-8');
         expect(files.includes('lazycoder-com-test.html')).toBe(true);
+        fs.readFile('./lazycoder-com-test.html', 'utf-8', (err, html) => {
+          expect(html).toBe(expectedData);
+        });
         expect(msg).toBe(`\nPage was downloaded as ${chalk.green('lazycoder-com-test.html')}`);
-        expect(fileData).toBe(expectedData);
         done();
       })
       .catch(e => done.fail(e));

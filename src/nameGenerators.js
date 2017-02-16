@@ -1,4 +1,6 @@
-const linkToArray = link => link.split(/[^A-Z, a-z, 0-9]/g).filter(e => e).slice(1);
+const linkToArray = (link) => {
+  return link ? link.split(/[^A-Z, a-z, 0-9]/g).filter(e => e).slice(1) : [];
+};
 
 const fileNameGenerator = (arrLink) => {
   const extension = arrLink[arrLink.length - 1];
