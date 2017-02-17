@@ -53,7 +53,10 @@
     "cheerio": "^0.22.0",
     "commander": "^2.9.0",
     "lodash": "^4.17.4",
-    "nock": "^9.0.6"
+    "mz": "^2.6.0",
+    "ncp": "^2.0.0",
+    "nock": "^9.0.6",
+    "readline-sync": "^1.4.6"
   },
   "main": "index.js"
 }

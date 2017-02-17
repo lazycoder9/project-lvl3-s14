@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'mz/fs';
 import nock from 'nock';
 import chalk from 'chalk';
 import loader from '../src';
@@ -19,7 +19,7 @@ const expectedData = `<!DOCTYPE html>
 <html>
   <head>
     <title>Test Page</title>
-    <link rel="shortcut icon" type="image/x-icon" href="/lazycoder-com-test_files/cdn2-hexlet-io-assets-icons-default-favicon-8fa102c058afb01de5016a155d7db433283dc7e08ddc3c4d1aef527c1b8502b6.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="lazycoder-com-test_files/cdn2-hexlet-io-assets-icons-default-favicon-8fa102c058afb01de5016a155d7db433283dc7e08ddc3c4d1aef527c1b8502b6.ico">
   </head>
   <body>
     <h1>Test heade</h1>
@@ -34,21 +34,21 @@ describe('Loader test', () => {
       .reply(200, data);
   });
 
-  test('Test lazycoder.com', (done) => {
-    loader('http://lazycoder.com/test')
-      .then((msg) => {
-        const files = fs.readdirSync('./');
-        expect(files.includes('lazycoder-com-test.html')).toBe(true);
-        fs.readFile('./lazycoder-com-test.html', 'utf-8', (err, html) => {
-          expect(html).toBe(expectedData);
-        });
-        expect(msg).toBe(`\nPage was downloaded as ${chalk.green('lazycoder-com-test.html')}`);
-        done();
-      })
-      .catch(e => done.fail(e));
+  test('Test lazycoder.com', async (done) => {
+    try {
+      const msg = await loader('http://lazycoder.com/test', './');
+      expect(msg).toBe(`\nPage was downloaded as ${chalk.green('lazycoder-com-test.html')}`);
+      const files = await fs.readdir('./');
+      expect(files.includes('lazycoder-com-test.html')).toBe(true);
+      const html = await fs.readFile('./lazycoder-com-test.html', 'utf-8');
+      expect(html).toBe(expectedData);
+      done();
+    } catch (e) {
+      done.fail(e);
+    }
   });
 
-  afterAll(() => {
+  afterAll(async () => {
     nock.cleanAll();
   });
 });

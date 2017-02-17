@@ -8,14 +8,21 @@ import generateName from './nameGenerators';
 const successMark = chalk.green(String.fromCharCode(0x2713));
 const failMark = chalk.red(String.fromCharCode(0x2718));
 
-const downloadFile = (link, pathToFile) => axios.get(link, {
-  responseType: 'arraybuffer',
-}).then((res) => {
-  fs.writeFileSync(pathToFile, res.data, 'binary');
-  console.log(`${successMark} ${link}`);
-}).catch(() => console.log(`${failMark} ${link}`));
+const downloadFile = async (link, pathToFile) => {
+  try {
+    const res = await axios.get(link, {
+      responseType: 'arraybuffer',
+    });
+    await fs.writeFile(pathToFile, res.data, 'binary');
+    console.log(`${successMark} ${link}`);
+  } catch (error) {
+    console.log(`${failMark} ${link}`);
+    console.log(`\nOohhhhh... It seems there was error :(
+" ${chalk.red(error.message)} "\n`);
+  }
+};
 
-export default (data, link, pathToDir = './') => {
+export default async (data, link, pathToDir = './') => {
   const urls = getUrls(data, link);
   const dir = path.resolve(pathToDir, generateName(link, 'folder'));
   if (!fs.existsSync(pathToDir)) {
@@ -24,8 +31,9 @@ export default (data, link, pathToDir = './') => {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
-  return Promise.all(urls.map((url) => {
+  await Promise.all(urls.map((url) => {
     const pathToFile = path.resolve(dir, generateName(url, 'file'));
     return downloadFile(url, pathToFile);
-  })).then(() => data);
+  }));
+  return data;
 };

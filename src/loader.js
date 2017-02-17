@@ -1,49 +1,27 @@
-import fs from 'fs';
+import fs from 'mz/fs';
 import path from 'path';
 import chalk from 'chalk';
+import ncp from 'ncp';
 import os from 'os';
 import axios from './lib/axios';
 import generateName from './nameGenerators';
 import downloadFiles from './getFiles';
 import replaceUrls from './replaceUrls';
 
-const moveFiles = (src, dest) => {
-  const files = fs.readdirSync(src);
-  files.forEach((e) => {
-    const fileSrc = path.resolve(src, e);
-    const fileDest = path.resolve(dest, e);
-    if (fs.lstatSync(fileSrc).isDirectory()) {
-      moveFiles(fileSrc, fileDest);
-    } else {
-      if (!fs.existsSync(dest)) {
-        fs.mkdirSync(dest);
-      }
-      const source = fs.createReadStream(fileSrc);
-      const desti = fs.createWriteStream(fileDest);
-
-      source.pipe(desti);
-      source.on('end', () => {
-        fs.unlink(fileSrc, (err) => {
-          if (err) throw err;
-        });
-      });
-    }
+const moveFiles = async (src, dest) => {
+  return new Promise((resolve, reject) => {
+    ncp(src, dest, err => (err ? reject(err) : resolve()));
   });
 };
 
-export default (urlLink, pathToSave = './') => {
-  const fileName = generateName(urlLink, 'html');
+export default async (urlLink, pathToSave = './') => {
   const tempDir = fs.mkdtempSync(`${os.tmpdir()}/`);
+  const fileName = generateName(urlLink, 'html');
   const filePath = path.resolve(tempDir, fileName);
-  return axios.get(urlLink)
-    .then(res => downloadFiles(res.data, urlLink, tempDir))
-    .then((data) => {
-      const newData = replaceUrls(data, urlLink);
-      fs.writeFileSync(filePath, newData);
-      return `\nPage was downloaded as ${chalk.green(fileName)}`;
-    })
-    .then((msg) => {
-      moveFiles(tempDir, pathToSave);
-      return msg;
-    });
+  const response = await axios.get(urlLink);
+  const data = await downloadFiles(response.data, urlLink, tempDir);
+  const newData = replaceUrls(data, urlLink);
+  await fs.writeFile(filePath, newData);
+  await moveFiles(tempDir, pathToSave);
+  return `\nPage was downloaded as ${chalk.green(fileName)}`;
 };

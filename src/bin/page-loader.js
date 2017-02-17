@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import program from 'commander';
-import chalk from 'chalk'
 import pageLoader from '../index';
 import pjson from '../../package.json';
 
