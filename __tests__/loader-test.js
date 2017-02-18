@@ -55,7 +55,6 @@ describe('Loader test', () => {
     try {
       await loader('http://lazycoder.com/notExist', './');
     } catch (e) {
-      console.log(e);
       expect(e.status).toBe(404);
     }
   });
