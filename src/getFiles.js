@@ -33,15 +33,15 @@ const opts = {
 
 const errors = [];
 
-const downloadFile = async (link, pathToFile) => {
+const downloadFile = async (link, spinnerID, pathToFile, spinners) => {
   try {
     const res = await axios.get(link, {
       responseType: 'arraybuffer',
     });
     await fs.writeFile(pathToFile, res.data, 'binary');
-    console.log(`${successMark} ${link}`);
+    spinners.success(spinnerID);
   } catch (error) {
-    console.log(`${failMark} ${link}`);
+    spinners.error(spinnerID);
     errors.push(`\nIt seems there was error.
 ${chalk.red(`Error: ${error.message}`)}
 ${chalk.red(`URL: ${link}`)}\n`);
@@ -51,7 +51,7 @@ ${chalk.red(`URL: ${link}`)}\n`);
 export default async (data, link, pathToDir = './') => {
   try {
     const urls = getUrls(data, link);
-    // const spinners = new Multispinner(urls, opts);
+    const spinners = new Multispinner(urls, opts);
     const dir = path.resolve(pathToDir, generateName(link, 'folder'));
     const isPathExists = await fs.exists(pathToDir);
     const isDirExists = await fs.exists(dir);
@@ -63,7 +63,7 @@ export default async (data, link, pathToDir = './') => {
     }
     await Promise.all(urls.map((url) => {
       const pathToFile = path.resolve(dir, generateName(url, 'file'));
-      return downloadFile(url, pathToFile);
+      return downloadFile(url, url, pathToFile, spinners);
     }));
     return { data, errors };
   } catch (error) {

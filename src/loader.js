@@ -31,9 +31,12 @@ export default async (urlLink, pathToSave = './') => {
     return successMsg;
   } catch (error) {
     if (error.response) {
-      return Promise.reject(`\nIt seems there was error.
+      return Promise.reject({
+        message: `\nIt seems there was error.
 ${chalk.red(`Error: ${error.message}`)}
-${chalk.red(`URL: ${urlLink}`)}\n`);
+${chalk.red(`URL: ${urlLink}`)}\n`,
+        status: error.response.status,
+      });
     }
     return Promise.reject(error);
   }
