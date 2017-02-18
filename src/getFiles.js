@@ -2,27 +2,27 @@ import fs from 'mz/fs';
 import path from 'path';
 import chalk from 'chalk';
 import Multispinner from 'multispinner';
-import ora from 'ora';
 import figures from 'figures';
 import axios from './lib/axios';
 import getUrls from './getUrls';
 import generateName from './nameGenerators';
 
-const successMark = chalk.green(String.fromCharCode(0x2713));
-const failMark = chalk.red(String.fromCharCode(0x2718));
-
 const opts = {
-  interval: 150,
-  preText: 'Completing',
+  interval: 120,
+  preText: 'Downloading',
   frames: [
-    '|',
-    '/',
-    '-',
-    '\\',
+    '[      ]',
+    '[*     ]',
+    '[**    ]',
+    '[ **   ]',
+    '[  **  ]',
+    '[   ** ]',
+    '[    **]',
+    '[     *]'
   ],
   symbol: {
-    success: figures.check,
-    error: figures.cross,
+    success: ' '.repeat(7) + figures.tick,
+    error: ' '.repeat(7) + figures.cross,
   },
   color: {
     incomplete: 'yellow',
