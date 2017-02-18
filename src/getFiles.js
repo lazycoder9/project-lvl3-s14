@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'mz/fs';
 import path from 'path';
 import chalk from 'chalk';
 import axios from './lib/axios';
