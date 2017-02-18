@@ -2,6 +2,7 @@ import fs from 'mz/fs';
 import path from 'path';
 import chalk from 'chalk';
 import Multispinner from 'multispinner';
+import ora from 'ora';
 import figures from 'figures';
 import axios from './lib/axios';
 import getUrls from './getUrls';
@@ -30,20 +31,20 @@ const opts = {
   },
 };
 
+const errors = [];
+
 const downloadFile = async (link, pathToFile) => {
   try {
     const res = await axios.get(link, {
       responseType: 'arraybuffer',
     });
     await fs.writeFile(pathToFile, res.data, 'binary');
-    return Promise.resolve(`${successMark} ${link}`);
+    console.log(`${successMark} ${link}`);
   } catch (error) {
-    if (error.response) {
-      return Promise.reject(`\nIt seems there was error.
+    console.log(`${failMark} ${link}`);
+    errors.push(`\nIt seems there was error.
 ${chalk.red(`Error: ${error.message}`)}
 ${chalk.red(`URL: ${link}`)}\n`);
-    }
-    return Promise.reject(error);
   }
 };
 
@@ -60,11 +61,11 @@ export default async (data, link, pathToDir = './') => {
     if (!isDirExists) {
       await fs.mkdir(dir);
     }
-    const downloadResult = await Promise.all(urls.map((url) => {
+    await Promise.all(urls.map((url) => {
       const pathToFile = path.resolve(dir, generateName(url, 'file'));
       return downloadFile(url, pathToFile);
     }));
-    return { downloadResult, data };
+    return { data, errors };
   } catch (error) {
     return Promise.reject(error);
   }

@@ -14,19 +14,27 @@ const moveFiles = async (src, dest) =>
   });
 
 export default async (urlLink, pathToSave = './') => {
+  if (!(await fs.exists(pathToSave))) {
+    return Promise.reject(chalk.red(`\nThere is no such directory '${pathToSave}'. Please, create it before downloading page.\n`));
+  }
   try {
     const tempDir = fs.mkdtempSync(`${os.tmpdir()}/`);
     const fileName = generateName(urlLink, 'html');
     const filePath = path.resolve(tempDir, fileName);
     const successMsg = `\nPage was downloaded as ${chalk.green(fileName)}`;
     const response = await axios.get(urlLink);
-    const { downloadResult, data } = await downloadFiles(response.data, urlLink, tempDir);
+    const { data, errors } = await downloadFiles(response.data, urlLink, tempDir);
     const newData = replaceUrls(data, urlLink);
     await fs.writeFile(filePath, newData);
     await moveFiles(tempDir, pathToSave);
-    console.log(downloadResult.join('\n'));
+    console.log(errors.join(''));
     return successMsg;
   } catch (error) {
+    if (error.response) {
+      return Promise.reject(`\nIt seems there was error.
+${chalk.red(`Error: ${error.message}`)}
+${chalk.red(`URL: ${urlLink}`)}\n`);
+    }
     return Promise.reject(error);
   }
 };
