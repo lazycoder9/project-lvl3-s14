@@ -8,11 +8,10 @@ import generateName from './nameGenerators';
 import downloadFiles from './getFiles';
 import replaceUrls from './replaceUrls';
 
-const moveFiles = async (src, dest) => {
-  return new Promise((resolve, reject) => {
+const moveFiles = async (src, dest) =>
+  new Promise((resolve, reject) => {
     ncp(src, dest, err => (err ? reject(err) : resolve()));
   });
-};
 
 export default async (urlLink, pathToSave = './') => {
   const tempDir = fs.mkdtempSync(`${os.tmpdir()}/`);

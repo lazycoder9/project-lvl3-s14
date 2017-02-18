@@ -25,11 +25,13 @@ const downloadFile = async (link, pathToFile) => {
 export default async (data, link, pathToDir = './') => {
   const urls = getUrls(data, link);
   const dir = path.resolve(pathToDir, generateName(link, 'folder'));
-  if (!fs.existsSync(pathToDir)) {
-    fs.mkdirSync(pathToDir);
+  const isPathExists = await fs.exists(pathToDir);
+  const isDirExists = await fs.exists(dir);
+  if (!isPathExists) {
+    await fs.mkdir(pathToDir);
   }
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
+  if (!isDirExists) {
+    await fs.mkdir(dir);
   }
   await Promise.all(urls.map((url) => {
     const pathToFile = path.resolve(dir, generateName(url, 'file'));

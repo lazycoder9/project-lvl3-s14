@@ -34,7 +34,7 @@ describe('Loader test', () => {
       .reply(200, data);
   });
 
-  test('Test lazycoder.com', async (done) => {
+  test('Test lazycoder.com', async () => {
     try {
       const msg = await loader('http://lazycoder.com/test', './');
       expect(msg).toBe(`\nPage was downloaded as ${chalk.green('lazycoder-com-test.html')}`);
@@ -42,9 +42,8 @@ describe('Loader test', () => {
       expect(files.includes('lazycoder-com-test.html')).toBe(true);
       const html = await fs.readFile('./lazycoder-com-test.html', 'utf-8');
       expect(html).toBe(expectedData);
-      done();
     } catch (e) {
-      done.fail(e);
+      console.log(e);
     }
   });
 

@@ -15,8 +15,8 @@ export const getUrl = type => getUrlTypes[type];
 
 export default (data, link) => {
   const $ = cheerio.load(data);
-  const urls = _.flatMap(['link', 'script', 'img'], (item) => {
-    return $(item).map(function () {
+  const urls = _.flatMap(['link', 'script', 'img'], item =>
+    $(item).map(function () {
       const current = getUrl(item)($(this));
       if (current) {
         if (current.includes('http')) {
@@ -24,7 +24,6 @@ export default (data, link) => {
         }
         return `${link}${current}`;
       }
-    }).get();
-  });
+    }).get());
   return urls;
 };
