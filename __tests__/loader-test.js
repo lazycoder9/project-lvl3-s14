@@ -32,6 +32,10 @@ describe('Loader test', () => {
     nock('http://lazycoder.com')
       .get('/test')
       .reply(200, data);
+
+    nock('http://lazycoder.com')
+      .get('/notExist')
+      .reply(404, 'Not Exist');
   });
 
   test('Test lazycoder.com', async () => {
@@ -43,11 +47,15 @@ describe('Loader test', () => {
       const html = await fs.readFile('./lazycoder-com-test.html', 'utf-8');
       expect(html).toBe(expectedData);
     } catch (e) {
-      console.log(e);
+      throw Error(e);
     }
   });
 
-  afterAll(async () => {
-    nock.cleanAll();
+  test('Test not exist page', async () => {
+    try {
+      await loader('http://lazycoder.com/notExist', './');
+    } catch (e) {
+      expect(e.response.status).toBe(404);
+    }
   });
 });

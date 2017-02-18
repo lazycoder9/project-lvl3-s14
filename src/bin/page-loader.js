@@ -10,9 +10,8 @@ program
   .option('-o, --output [path_to_save]', 'Path to save files')
   .action((url) => {
     pageLoader(url, program.output)
-      .then((res) => {
-        console.log(res);
-      });
+      .then(res => console.log(res))
+      .catch(error => console.log(error));
   })
   .parse(process.argv);
 
