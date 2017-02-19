@@ -8,21 +8,9 @@ import getUrls from './getUrls';
 import generateName from './nameGenerators';
 
 const opts = {
-  interval: 120,
-  preText: 'Downloading',
-  frames: [
-    '[      ]',
-    '[*     ]',
-    '[**    ]',
-    '[ **   ]',
-    '[  **  ]',
-    '[   ** ]',
-    '[    **]',
-    '[     *]'
-  ],
   symbol: {
-    success: ' '.repeat(7) + figures.tick,
-    error: ' '.repeat(7) + figures.cross,
+    success: figures.tick,
+    error: figures.cross,
   },
   color: {
     incomplete: 'yellow',
@@ -30,8 +18,6 @@ const opts = {
     error: 'red',
   },
 };
-
-const errors = [];
 
 const downloadFile = async (link, spinnerID, pathToFile, spinners) => {
   try {
@@ -42,9 +28,9 @@ const downloadFile = async (link, spinnerID, pathToFile, spinners) => {
     spinners.success(spinnerID);
   } catch (error) {
     spinners.error(spinnerID);
-    errors.push(`\nIt seems there was error.
+    return `\nIt seems there was error.
 ${chalk.red(`Error: ${error.message}`)}
-${chalk.red(`URL: ${link}`)}\n`);
+${chalk.red(`URL: ${link}`)}\n`;
   }
 };
 
@@ -61,7 +47,7 @@ export default async (data, link, pathToDir = './') => {
     if (!isDirExists) {
       await fs.mkdir(dir);
     }
-    await Promise.all(urls.map((url) => {
+    const errors = await Promise.all(urls.map((url) => {
       const pathToFile = path.resolve(dir, generateName(url, 'file'));
       return downloadFile(url, url, pathToFile, spinners);
     }));
