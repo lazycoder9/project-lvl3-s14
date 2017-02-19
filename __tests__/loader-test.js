@@ -39,16 +39,12 @@ describe('Loader test', () => {
   });
 
   test('Test lazycoder.com', async () => {
-    try {
-      const msg = await loader('http://lazycoder.com/test', './');
-      expect(msg).toBe(`\nPage was downloaded as ${chalk.green('lazycoder-com-test.html')}`);
-      const files = await fs.readdir('./');
-      expect(files.includes('lazycoder-com-test.html')).toBeTruthy();
-      const html = await fs.readFile('./lazycoder-com-test.html', 'utf-8');
-      expect(html).toBe(expectedData);
-    } catch (e) {
-      throw Error(e);
-    }
+    const msg = await loader('http://lazycoder.com/test', './');
+    expect(msg).toBe(`\nPage was downloaded as ${chalk.green('lazycoder-com-test.html')}`);
+    const files = await fs.readdir('./');
+    expect(files.includes('lazycoder-com-test.html')).toBeTruthy();
+    const html = await fs.readFile('./lazycoder-com-test.html', 'utf-8');
+    expect(html).toBe(expectedData);
   });
 
   test('Test not exist page', async () => {
