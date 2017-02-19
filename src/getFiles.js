@@ -8,9 +8,19 @@ import getUrls from './getUrls';
 import generateName from './nameGenerators';
 
 const opts = {
+  interval: 120,
+  frames: [
+    '[*    ]',
+    '[**   ]',
+    '[ **  ]',
+    '[  ** ]',
+    '[   **]',
+    '[    *]',
+    '[     ]',
+  ],
   symbol: {
-    success: figures.tick,
-    error: figures.cross,
+    success: ' '.repeat(5) + figures.tick,
+    error: ' '.repeat(5) + figures.cross,
   },
   color: {
     incomplete: 'yellow',
